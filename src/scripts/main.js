@@ -1,34 +1,35 @@
 'use strict';
 
 function centerSpider() {
+  const wall = document.querySelector('.wall');
   const spider = document.querySelector('.spider');
-  const walls = document.querySelector('.wall');
 
   // Перевірка, що елементи знайдені
-  if (!spider || !walls) {
-    // eslint-disable-next-line no-console
-    console.warn('❗ Element .spider або .wall не знайдено');
-
+  if (!wall || !spider) {
     return;
   }
 
-  const wallsRect = walls.getBoundingClientRect();
+  const wallRect = wall.getBoundingClientRect();
   const spiderRect = spider.getBoundingClientRect();
 
-  // Центрування
-  const topPx = wallsRect.height / 2 - spiderRect.height / 2;
-  const leftPx = wallsRect.width / 2 - spiderRect.width / 2;
+  const topPx = wallRect.height / 2 - spiderRect.height / 2;
+  const leftPx = wallRect.width / 2 - spiderRect.width / 2;
 
   spider.style.top = `${topPx}px`;
   spider.style.left = `${leftPx}px`;
 }
 
-// Виконуємо після завантаження всіх ресурсів
+// Виконуємо після повного завантаження сторінки (зображень теж)
 window.addEventListener('load', () => {
   centerSpider();
 });
 
-// Перецентровуємо при зміні розміру вікна
+// Оптимізований виклик при зміні розміру
+let resizeTimeout;
+
 window.addEventListener('resize', () => {
-  centerSpider();
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(centerSpider, 150); // debounce на 150мс
 });
+
+// fuck a ai buddy, u are fucking pidoras
